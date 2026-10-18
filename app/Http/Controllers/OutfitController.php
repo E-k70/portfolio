@@ -26,7 +26,7 @@ class OutfitController extends Controller
      */
     public function create()
     {
-        //
+        return view('outfits.create');
     }
 
     /**
@@ -34,7 +34,23 @@ class OutfitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validatie op de data
+        $request->validate([
+            'title' => 'required|min:3',
+            'description' => 'required',
+            'image_url' => 'required'
+        ]);
+
+        //info in database zetten
+        $outfit = new Outfit();
+        $outfit->title = $request->input('title');
+        $outfit->description = $request->input('description');
+        $outfit->image_url = $request->input('image_url');
+
+        $outfit->save();
+
+        //redirect naar outfits.index
+        return redirect()->route('outfits.index');
     }
 
     /**

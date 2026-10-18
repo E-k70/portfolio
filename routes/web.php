@@ -19,5 +19,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/outfits', [OutfitController::class, 'index'])->name('outfits.index');
+Route::post('/outfits', [OutfitController::class, 'store'])->name('outfits.store');
+Route::get('/outfits/create', [OutfitController::class, 'create'])->name(name: 'outfits.create');
+Route::get('/outfits/{outfit}', [OutfitController::class, 'show'])->name(name: 'outfits.show');
 
 require __DIR__ . '/auth.php';
