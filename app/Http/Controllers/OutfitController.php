@@ -56,9 +56,9 @@ class OutfitController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Outfit $outfit)
     {
-        //
+        return view('outfits.show', compact('outfit'));
     }
 
     /**

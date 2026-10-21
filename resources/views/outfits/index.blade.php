@@ -8,6 +8,7 @@
             <li> {{ $outfit->image_url }} </li>
             <li> {{ $outfit->title }} </li>
             <li> Description: {{ $outfit->description }} </li>
+            <a href="{{ route('outfits.show', $outfit) }}" class="button">More details</a>
         </ul>
     @endforeach
 </x-app-layout>
