@@ -80,8 +80,11 @@ class OutfitController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Outfit $outfit)
     {
-        //
+        $outfit->delete();
+
+        return redirect()->route('outfits.index')
+            ->with('success', 'Outfit deleted successfully.');
     }
 }

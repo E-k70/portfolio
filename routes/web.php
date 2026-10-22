@@ -22,5 +22,6 @@ Route::get('/outfits', [OutfitController::class, 'index'])->name('outfits.index'
 Route::post('/outfits', [OutfitController::class, 'store'])->name('outfits.store');
 Route::get('/outfits/create', [OutfitController::class, 'create'])->name(name: 'outfits.create');
 Route::get('/outfits/{outfit}', [OutfitController::class, 'show'])->name(name: 'outfits.show');
+Route::delete('/outfits/{outfit}', [OutfitController::class, 'destroy'])->name('outfits.destroy');
 
 require __DIR__ . '/auth.php';
