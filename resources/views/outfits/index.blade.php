@@ -5,7 +5,7 @@
 
     @foreach($outfits as $outfit)
         <ul>
-            <li> {{ $outfit->image_url }} </li>
+            <img src="{{ $outfit->image_url }}" alt="{{ $outfit->title }}" class="outfit-image">
             <li> {{ $outfit->title }} </li>
             <li> Description: {{ $outfit->description }} </li>
             <a href="{{ route('outfits.show', $outfit) }}" class="button">More details</a>
