@@ -3,12 +3,13 @@
         Outfits
     </h1>
 
-    @foreach($outfits as $outfit)
-        <ul>
+    <x-card>
+        @foreach($outfits as $outfit)
             <img src="{{ $outfit->image_url }}" alt="{{ $outfit->title }}" class="outfit-image">
-            <li> {{ $outfit->title }} </li>
-            <li> Description: {{ $outfit->description }} </li>
+            <p> {{ $outfit->title }} </p>
+            <p> Description: {{ $outfit->description }} </p>
             <a href="{{ route('outfits.show', $outfit) }}" class="button">More details</a>
-        </ul>
-    @endforeach
+        @endforeach
+    </x-card>
+
 </x-app-layout>

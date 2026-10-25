@@ -3,7 +3,7 @@
 
     <p>Titel: {{ $outfit->title }}</p>
     <p>Beschrijving: {{ $outfit->description }}</p>
-    <p>Afbeelding: {{ $outfit->image_url }}</p>
+    <img src="{{ $outfit->image_url }}" alt="{{ $outfit->title }}" class="outfit-image">
 
     <form action="{{ route('outfits.destroy', $outfit) }}" method="post"
           onsubmit="return confirm('Are you sure you want to delete this outfit');">
