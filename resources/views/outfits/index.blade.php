@@ -1,15 +1,17 @@
-<x-app-layout>
+<x-layout>
     <h1>
         Outfits
     </h1>
 
-    <x-card>
+    <div class="outfit-grid">
         @foreach($outfits as $outfit)
-            <img src="{{ $outfit->image_url }}" alt="{{ $outfit->title }}" class="outfit-image">
-            <p> {{ $outfit->title }} </p>
-            <p> Description: {{ $outfit->description }} </p>
-            <a href="{{ route('outfits.show', $outfit) }}" class="button">More details</a>
+            <x-card>
+                <img src="{{ $outfit->image_url }}" alt="{{ $outfit->title }}" class="outfit-image">
+                <h3>{{ $outfit->title }}</h3>
+                <p>Description: {{ $outfit->description }}</p>
+                <a href="{{ route('outfits.show', $outfit) }}" class="button">More details</a>
+            </x-card>
         @endforeach
-    </x-card>
+    </div>
 
-</x-app-layout>
+</x-layout>

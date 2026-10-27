@@ -1,3 +1,3 @@
-<div class="card" style="text-align: center;">
+<div class="card">
     {{ $slot }}
 </div>
