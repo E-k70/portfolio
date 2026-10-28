@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Outfit extends Model
 {
-    //
+    public function filter()
+    {
+        return $this->belongsTo(Filter::class);
+    }
 }
+

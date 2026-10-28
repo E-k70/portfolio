@@ -24,6 +24,9 @@
         }
 
         nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -111,7 +114,9 @@
 <nav>
     <div class="nav-left">
         <a href="/outfits">Outfits</a>
-        <a href="/outfits/create">Create +</a>
+        @auth
+            <a href="/outfits/create">Create +</a>
+        @endauth
     </div>
 
     <div class="nav-right">

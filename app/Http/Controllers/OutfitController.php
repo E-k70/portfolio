@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Outfit;
+use App\Models\Filter;
 use Illuminate\Http\Request;
 
 class OutfitController extends Controller
@@ -10,16 +11,20 @@ class OutfitController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $outfits = Outfit::all();
+        $query = Outfit::with('filter');
 
-        //$outfit = new Outfit();
-        //$outfit->title = 'nieuwe fit';
-        //$outfit->price = 1050;
+        if ($request->filled('filter')) {
+            $query->where('filter_id', $request->filter);
+        }
 
-        return view('outfits.index', compact('outfits'));
+        $outfits = $query->get();
+        $filters = Filter::all();
+
+        return view('outfits.index', compact('outfits', 'filters'));
     }
+
 
     /**
      * Show the form for creating a new resource.
