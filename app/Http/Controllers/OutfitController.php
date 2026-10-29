@@ -19,6 +19,15 @@ class OutfitController extends Controller
             $query->where('filter_id', $request->filter);
         }
 
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
         $outfits = $query->get();
         $filters = Filter::all();
 
