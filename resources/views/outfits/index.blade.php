@@ -18,7 +18,7 @@
             @foreach($filters as $filter)
                 <option value="{{ $filter->id }}"
                     {{ request('filter') == $filter->id ? 'selected' : '' }}>
-                    {{ $filter->name }}
+                    {{ $filter->title }}
                 </option>
             @endforeach
         </select>

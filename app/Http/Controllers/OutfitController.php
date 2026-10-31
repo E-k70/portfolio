@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Outfit;
 use App\Models\Filter;
+use Auth;
 use Illuminate\Http\Request;
 
 class OutfitController extends Controller
@@ -23,7 +24,7 @@ class OutfitController extends Controller
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
+                $q->where('title', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
@@ -31,7 +32,9 @@ class OutfitController extends Controller
         $outfits = $query->get();
         $filters = Filter::all();
 
+
         return view('outfits.index', compact('outfits', 'filters'));
+
     }
 
 
@@ -57,9 +60,12 @@ class OutfitController extends Controller
 
         //info in database zetten
         $outfit = new Outfit();
+        $outfit->user_id = auth()->id();
+        $outfit->filter_id = $request->input('filter_id');
         $outfit->title = $request->input('title');
         $outfit->description = $request->input('description');
         $outfit->image_url = $request->input('image_url');
+
 
         $outfit->save();
 
@@ -72,6 +78,7 @@ class OutfitController extends Controller
      */
     public function show(Outfit $outfit)
     {
+
         return view('outfits.show', compact('outfit'));
     }
 
@@ -100,5 +107,12 @@ class OutfitController extends Controller
 
         return redirect()->route('outfits.index')
             ->with('success', 'Outfit deleted successfully.');
+    }
+
+    public function toggleSave(Outfit $outfit)
+    {
+        Auth::user()->savedOutfits()->toggle($outfit->id);
+
+        return back();
     }
 }

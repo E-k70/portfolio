@@ -10,5 +10,11 @@ class Outfit extends Model
     {
         return $this->belongsTo(Filter::class);
     }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
 

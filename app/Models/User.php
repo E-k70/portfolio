@@ -42,4 +42,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+
+    public function outfit()
+    {
+        return $this->hasMany(Outfit::class);
+    }
 }

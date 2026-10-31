@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->text('description');
             //$table->float('price');
             $table->string('image_url');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
 
             $table->timestamps();
         });
