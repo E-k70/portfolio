@@ -16,5 +16,13 @@ class Outfit extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function likedBy()
+    {
+        return $this->belongsToMany(User::class, 'outfit_likes')->withTimestamps();
+    }
+
+    protected $fillable = ['title', 'description', 'image_url', 'filter_id'];
+    protected $casts = ['active' => 'boolean',];
 }
 

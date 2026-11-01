@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Outfit;
 use App\Models\Filter;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class OutfitController extends Controller
 {
@@ -14,7 +14,7 @@ class OutfitController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Outfit::with('filter');
+        $query = Outfit::with('filter')->withCount('likedBy')->where('active', true);
 
         if ($request->filled('filter')) {
             $query->where('filter_id', $request->filter);
@@ -32,8 +32,12 @@ class OutfitController extends Controller
         $outfits = $query->get();
         $filters = Filter::all();
 
+        $likedIds = auth()->check()
+            ? auth()->user()->likedOutfits()->pluck('outfits.id')->all()
+            : [];
 
-        return view('outfits.index', compact('outfits', 'filters'));
+        return view('outfits.index', compact('outfits', 'filters', 'likedIds'));
+
 
     }
 
@@ -43,7 +47,9 @@ class OutfitController extends Controller
      */
     public function create()
     {
-        return view('outfits.create');
+        $filters = Filter::all();
+
+        return view('outfits.create', compact('filters'));
     }
 
     /**
@@ -53,9 +59,10 @@ class OutfitController extends Controller
     {
         //validatie op de data
         $request->validate([
-            'title' => 'required|min:3',
-            'description' => 'required',
-            'image_url' => 'required'
+            'title' => 'required|min:3|max:255',
+            'description' => 'required|max:255',
+            'image_url' => 'required|url|max:2048',
+            'filter_id' => 'nullable|exists:filters,id'
         ]);
 
         //info in database zetten
@@ -78,6 +85,9 @@ class OutfitController extends Controller
      */
     public function show(Outfit $outfit)
     {
+        if (!$outfit->active && !Gate::allows('update', $outfit)) {
+            abort(404);
+        }
 
         return view('outfits.show', compact('outfit'));
     }
@@ -85,33 +95,54 @@ class OutfitController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Outfit $outfit)
     {
-        //
+        Gate::authorize('update', $outfit);
+
+        $filters = Filter::all();
+
+        return view('outfits.edit', compact('outfit', 'filters'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Outfit $outfit)
     {
-        //
+        Gate::authorize('update', $outfit);
+
+        $validated = $request->validate([
+            'title' => 'required|min:3',
+            'description' => 'required',
+            'image_url' => 'required',
+            'filter_id' => 'nullable|exists:filters,id',
+        ]);
+
+        $outfit->update($validated);
+
+        return redirect()->route('outfits.show', $outfit)
+            ->with('success', 'Outfit updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Outfit $outfit)
     {
+        Gate::authorize('delete', $outfit);
+
         $outfit->delete();
 
         return redirect()->route('outfits.index')
             ->with('success', 'Outfit deleted successfully.');
     }
 
-    public function toggleSave(Outfit $outfit)
+    public function toggleLike(Request $request, Outfit $outfit)
     {
-        Auth::user()->savedOutfits()->toggle($outfit->id);
+        abort_unless($outfit->active, 404);
+        
+        $request->user()->likedOutfits()->toggle($outfit->id);
 
         return back();
     }

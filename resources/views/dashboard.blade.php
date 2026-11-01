@@ -1,24 +1,18 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-        <a href="/outfits">Outfits</a>
-    </x-slot>
+<x-layout>
+    <h1>Hello, {{ auth()->user()->name }}</h1>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
+    <div class="dashboard">
+        <x-card>
+            <h3>Your account</h3>
+            <p>{{ auth()->user()->email }}</p>
+            <a href="{{ route('profile.edit') }}" class="button">Edit profile</a>
+        </x-card>
+
+        <x-card>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit">Log out</button>
+            </form>
+        </x-card>
     </div>
-
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit">Logout</button>
-    </form>
-
-</x-app-layout>
+</x-layout>

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Role;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
@@ -11,8 +10,6 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
 #[Fillable(['name', 'email', 'password'])]
@@ -37,15 +34,14 @@ class User extends Authenticatable
         ];
     }
 
-    //one to many
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
-
 
     public function outfit()
     {
         return $this->hasMany(Outfit::class);
+    }
+
+    public function likedOutfits()
+    {
+        return $this->belongsToMany(Outfit::class, 'outfit_likes')->withTimestamps();
     }
 }
